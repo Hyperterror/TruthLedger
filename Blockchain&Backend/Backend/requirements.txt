@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+pymongo
+python-dotenv
+pydantic
+pydantic-settings
+web3
+PyJWT
+python-multipart
+motor
+websockets
+cryptography
+scikit-learn
