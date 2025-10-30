@@ -1,0 +1,75 @@
+Next.js--- Frontend
+TailwindCSS--styling
+Web3--connecting to blockchain
+chart.js--- Real time data visualization
+Redux--- State management
+
+Features:
+Dashboard:
+--> Live donation Tracker [ amount , donor, cause, timestamp]
+--> Fund flow visualization [donation -> allocation -> beneficiary]
+--> Search/filter option 
+--> Public Audit trail
+
+Backend:
+--> FAST API (if possible)
+--> MongoDB
+--> Web3
+--> Socket.io {Real-time update}
+
+Backend Responsibilities:
+-- query blockchain for transactions
+-- user authentication {donor,charities,admins}
+-- Data indexing for fast searches
+-- API endpoints for frontend
+
+Blockchain:
+Solidity -- smart contracts
+Ethereum (Main)
+Polyglot (Test)
+Hardhat (development framework)
+OpenZeppelin (Pre build smart contract)
+
+Contracts to build--
+1) Donation token contract : Tracks donation records
+2) Fund allocation contract: Distributes funds to causes
+3) Project Milestone Contract: Verifies Project completion before fund release
+4) Access Control Contract: Manages donor, charity, admin roles
+
+Fraud Detection & AI Layer
+Technology	Purpose
+Python + scikit-learn	Build anomaly detection models for suspicious transaction patterns
+TensorFlow/PyTorch	Deep learning for fraud classification
+Chainlink Oracles	Bring external verification data on-chain (e.g., verify beneficiary existence)
+Fraud Detection Rules:
+
+Flag unusually large donations
+
+Detect repeated donations from same wallet to multiple causes
+
+Alert if fund allocation deviates from project plan
+
+Track wallet history for known bad actors
+
+Success Metrics for Hackathon Judging
+Implement these to maximize your score:
+
+Immutable Ledger ✅ Every donation recorded with transaction hash
+
+Smart Contract Automation ✅ Funds automatically route when milestones verified
+
+Real-time Dashboard ✅ Live donation feed with < 2 second latency
+
+Public Audit Trail ✅ Anyone can verify any transaction with blockchain proof
+
+Impact Metrics ✅ Show beneficiary reach, fund utilization %, project completion %
+
+Fraud Detection ✅ Flag suspicious transactions with explanations
+
+Gamification ✅ Donor leaderboard with badges
+
+UI/UX Excellence ✅ Professional, intuitive interface
+
+Code Quality ✅ Clean, documented, tested code on GitHub
+
+Pitch & Presentation ✅ Clear explanation of problem, solution, and impact
