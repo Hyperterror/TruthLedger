@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import DonationChart from "./Donations";
+import DonationChart from "../Components/Dashboard";
 
 export default function Dashboard() {
   const donations = useSelector((state) => state.donation.donations);

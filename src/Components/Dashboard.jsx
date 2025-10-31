@@ -14,7 +14,7 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export default function Dashboard() {
+export default function DonationChart() {
   const donations = useSelector((state) => state.donation.donations);
 
   // Prepare data, fallback empty
