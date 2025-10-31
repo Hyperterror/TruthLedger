@@ -1,6 +1,6 @@
-from pymongo import MongoClient
-from pymongo.errors import ConnectionFailure
-from app.core.config import settings
+from motor.motor_asyncio import AsyncIOMotorClient as AsyncIOMongoClient
+from pymongo.errors import ConnectionFailure, ServerSelectionTimeoutError
+from app.core.config import get_settings
 import logging
 
 logger = logging.getLogger(__name__)
@@ -10,16 +10,17 @@ class Database:
     db = None
 
     @classmethod
-    def connect_db(cls):
+    async def connect_db(cls):
         try:
-            cls.client = MongoClient(settings.DATABASE_URL)
-            cls.client.admin.command('ping')
+            settings = get_settings()
+            cls.client = AsyncIOMongoClient(settings.DATABASE_URL)
+            await cls.client.admin.command('ping')
             cls.db = cls.client[settings.MONGO_DATABASE]
             logger.info("✅ Connected to MongoDB successfully")
             
             # Create indexes
-            cls._create_indexes()
-        except ConnectionFailure as e:
+            await cls._create_indexes()
+        except (ConnectionFailure, ServerSelectionTimeoutError) as e:
             logger.error(f"❌ Failed to connect to MongoDB: {e}")
             raise
 
@@ -30,18 +31,15 @@ class Database:
             logger.info("✅ MongoDB connection closed")
 
     @classmethod
-    def _create_indexes(cls):
+    async def _create_indexes(cls):
         """Create necessary indexes for performance"""
-        cls.db.donations.create_index("donor")
-        cls.db.donations.create_index("cause")
-        cls.db.donations.create_index("timestamp")
-        cls.db.projects.create_index("beneficiary")
-        cls.db.projects.create_index("status")
+        await cls.db.donations.create_index("donor")
+        await cls.db.donations.create_index("cause")
+        await cls.db.donations.create_index("timestamp")
+        await cls.db.projects.create_index("beneficiary")
+        await cls.db.projects.create_index("status")
         logger.info("✅ Database indexes created")
 
     @classmethod
     def get_db(cls):
         return cls.db
-
-# Initialize database
-db = Database()

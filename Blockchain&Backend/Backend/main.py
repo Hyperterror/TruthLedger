@@ -9,7 +9,7 @@ from app.core.database import Database
 from app.core.config import settings
 from routes import donations, auth, blockchain, projects
 from services.event_listener import EventListener
-from services.web3_service import Web3Service
+from services.web3_services import Web3Service
 
 # Configure logging
 logging.basicConfig(
@@ -33,7 +33,7 @@ async def lifespan(app: FastAPI):
     logger.info("🚀 Starting up C-DAC Backend...")
     
     # Connect to MongoDB
-    Database.connect_db()
+    await Database.connect_db()
     
     # Initialize Web3
     web3_service = Web3Service(settings.ETHEREUM_RPC_URL)

@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from services.web3_service import Web3Service
+from .web3_services import Web3Service
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
