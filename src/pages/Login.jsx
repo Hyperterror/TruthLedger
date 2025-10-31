@@ -1,23 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { loginStart, loginSuccess, loginFailure, clearError } from "../store/authSlice";
+import { authAPI } from "../services/api";
+import web3Service from "../services/web3";
 
 export default function Login() {
-  const [form, setForm] = useState({
-    email: "",
-    wallet: "",
-    password: "",
-  });
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [walletAddress, setWalletAddress] = useState("");
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
+
+  const connectWallet = async () => {
+    try {
+      dispatch(clearError());
+      const initialized = await web3Service.init();
+      if (initialized) {
+        const address = await web3Service.getAddress();
+        setWalletAddress(address);
+        setWalletConnected(true);
+      } else {
+        alert("Please install MetaMask to continue");
+      }
+    } catch (error) {
+      console.error("Wallet connection failed:", error);
+      dispatch(loginFailure("Failed to connect wallet"));
+    }
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const { email, wallet, password } = form;
-    if (!email || !wallet || !password)
-      return alert("Please fill all fields.");
-    alert(`Logged in as ${email}`);
-    // TODO: Add actual login logic & redirect
+    if (!walletConnected) {
+      alert("Please connect your wallet first");
+      return;
+    }
+
+    try {
+      dispatch(loginStart());
+
+      // Switch to Polygon Amoy network
+      await web3Service.switchToAmoy();
+
+      // Authenticate with backend
+      const response = await authAPI.login(walletAddress);
+      const { access_token } = response;
+
+      dispatch(loginSuccess({
+        walletAddress,
+        token: access_token
+      }));
+
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login failed:", error);
+      dispatch(loginFailure(error.response?.data?.detail || "Login failed"));
+    }
   };
 
   return (
@@ -26,56 +71,46 @@ export default function Login() {
         <h2 className="text-3xl font-semibold mb-6 text-center text-blue-400">
           Welcome Back
         </h2>
-        <form onSubmit={handleLogin} className="flex flex-col gap-5">
-          {/* Email */}
-          <div className="text-left">
-            <label className="block mb-1 text-gray-300">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="you@example.com"
-              className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-          </div>
 
-          {/* Wallet Address */}
-          <div className="text-left">
-            <label className="block mb-1 text-gray-300">Wallet Address</label>
-            <input
-              type="text"
-              name="wallet"
-              value={form.wallet}
-              onChange={handleChange}
-              placeholder="0xabc123..."
-              className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
-            />
+        {!walletConnected ? (
+          <div className="text-center">
+            <p className="text-gray-300 mb-6">
+              Connect your MetaMask wallet to continue
+            </p>
+            <button
+              onClick={connectWallet}
+              className="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 rounded-lg transition duration-300 mb-4"
+            >
+              Connect MetaMask
+            </button>
           </div>
+        ) : (
+          <div className="text-center">
+            <div className="bg-green-900/50 border border-green-500 rounded-lg p-4 mb-6">
+              <p className="text-green-400 text-sm">Wallet Connected</p>
+              <p className="text-gray-300 text-xs font-mono mt-1">
+                {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+              </p>
+            </div>
 
-          {/* Password */}
-          <div className="text-left">
-            <label className="block mb-1 text-gray-300">Password</label>
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              placeholder="••••••••"
-              className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
-            />
+            <button
+              onClick={handleLogin}
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition duration-300"
+            >
+              {loading ? "Logging in..." : "Log In"}
+            </button>
           </div>
+        )}
 
-          <button
-            type="submit"
-            className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition duration-300"
-          >
-            Log In
-          </button>
-        </form>
+        {error && (
+          <div className="mt-4 p-3 bg-red-900/50 border border-red-500 rounded-lg">
+            <p className="text-red-400 text-sm">{error}</p>
+          </div>
+        )}
 
         <p className="mt-6 text-center text-gray-400 text-sm">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <a href="/signup" className="text-blue-400 hover:underline">
             Sign Up
           </a>
