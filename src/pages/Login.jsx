@@ -1,34 +1,86 @@
 import React, { useState } from "react";
 
 export default function Login() {
-  const [wallet, setWallet] = useState("");
+  const [form, setForm] = useState({
+    email: "",
+    wallet: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (!wallet) return alert("Enter wallet address");
-    alert(`Logged in as ${wallet}`);
-    // TODO: Implement login & redirect to dashboard
+    const { email, wallet, password } = form;
+    if (!email || !wallet || !password)
+      return alert("Please fill all fields.");
+    alert(`Logged in as ${email}`);
+    // TODO: Add actual login logic & redirect
   };
 
   return (
-    <section className="mx-auto max-w-md p-6 bg-white rounded shadow">
-      <h2 className="text-3xl font-semibold mb-4 text-center">Log In</h2>
-      <form onSubmit={handleLogin} className="flex flex-col gap-4">
-        <label className="block font-medium text-left">Wallet Address</label>
-        <input
-          type="text"
-          value={wallet}
-          onChange={(e) => setWallet(e.target.value)}
-          placeholder="0xabc123..."
-          className="w-full border border-gray-300 rounded px-3 py-2"
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-        >
-          Log In
-        </button>
-      </form>
+    <section className="flex items-center justify-center min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white px-4">
+      <div className="w-full max-w-md bg-gray-900/70 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-gray-800">
+        <h2 className="text-3xl font-semibold mb-6 text-center text-blue-400">
+          Welcome Back
+        </h2>
+        <form onSubmit={handleLogin} className="flex flex-col gap-5">
+          {/* Email */}
+          <div className="text-left">
+            <label className="block mb-1 text-gray-300">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="you@example.com"
+              className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+
+          {/* Wallet Address */}
+          <div className="text-left">
+            <label className="block mb-1 text-gray-300">Wallet Address</label>
+            <input
+              type="text"
+              name="wallet"
+              value={form.wallet}
+              onChange={handleChange}
+              placeholder="0xabc123..."
+              className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+
+          {/* Password */}
+          <div className="text-left">
+            <label className="block mb-1 text-gray-300">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              placeholder="••••••••"
+              className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition duration-300"
+          >
+            Log In
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-gray-400 text-sm">
+          Don’t have an account?{" "}
+          <a href="/signup" className="text-blue-400 hover:underline">
+            Sign Up
+          </a>
+        </p>
+      </div>
     </section>
   );
 }
