@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginStart, loginSuccess, loginFailure, clearError } from "../store/authSlice";
-import { authAPI } from "../services/api";
 import web3Service from "../services/web3";
 
 export default function Login() {
@@ -11,13 +10,9 @@ export default function Login() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const { loading, error } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    }
-  }, [isAuthenticated, navigate]);
+
 
   const connectWallet = async () => {
     try {
@@ -49,19 +44,16 @@ export default function Login() {
       // Switch to Polygon Amoy network
       await web3Service.switchToAmoy();
 
-      // Authenticate with backend
-      const response = await authAPI.login(walletAddress);
-      const { access_token } = response;
-
+      // Skip backend authentication for now - allow anyone to login
       dispatch(loginSuccess({
         walletAddress,
-        token: access_token
+        token: "dummy-token" // Use dummy token for now
       }));
 
       navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
-      dispatch(loginFailure(error.response?.data?.detail || "Login failed"));
+      dispatch(loginFailure("Failed to switch network"));
     }
   };
 
