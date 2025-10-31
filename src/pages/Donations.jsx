@@ -69,18 +69,18 @@ export default function Donations() {
   }
 
   return (
-    <section>
-      <h2 className="text-3xl font-semibold mb-4 text-blue-700">Donations List</h2>
+    <section className="max-w-7xl mx-auto p-6">
+      <h2 className="text-3xl font-semibold mb-4 text-blue-400">Donations List</h2>
 
       {/* Filters */}
-      <div className="bg-white p-4 rounded shadow mb-6">
+      <div className="bg-gray-800/50 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-gray-700 mb-6">
         <div className="flex flex-wrap gap-4 items-center">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Filter</label>
+            <label className="block text-sm font-medium text-gray-300 mb-1">Filter</label>
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="border border-gray-300 rounded px-3 py-2"
+              className="border border-gray-600 rounded-lg px-3 py-2 bg-gray-700/50 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
             >
               <option value="all">All Donations</option>
               <option value="my-donations">My Donations</option>
@@ -90,11 +90,11 @@ export default function Donations() {
 
           {filter === "cause" && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Cause</label>
+              <label className="block text-sm font-medium text-gray-300 mb-1">Cause</label>
               <select
                 value={selectedCause}
                 onChange={(e) => setSelectedCause(e.target.value)}
-                className="border border-gray-300 rounded px-3 py-2"
+                className="border border-gray-600 rounded-lg px-3 py-2 bg-gray-700/50 text-white focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
               >
                 <option value="">Select Cause</option>
                 {uniqueCauses.map(cause => (
@@ -104,65 +104,65 @@ export default function Donations() {
             </div>
           )}
 
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-gray-400">
             Showing {filteredDonations.length} donation{filteredDonations.length !== 1 ? 's' : ''}
           </div>
         </div>
       </div>
 
       {/* Donations Table */}
-      <div className="overflow-auto max-h-[600px] bg-white p-6 rounded shadow">
+      <div className="overflow-auto max-h-[600px] bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-700">
         {loading ? (
-          <div className="text-center py-8">Loading donations...</div>
+          <div className="text-center py-8 text-gray-300">Loading donations...</div>
         ) : filteredDonations.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="text-center py-8 text-gray-400">
             {filter === "my-donations" ? "You haven't made any donations yet." :
              filter === "cause" ? "No donations found for this cause." :
              "No donations found."}
           </div>
         ) : (
-          <table className="w-full border-collapse border border-gray-300">
+          <table className="w-full border-collapse border border-gray-600">
             <thead>
-              <tr className="bg-gray-200">
-                <th className="p-3 border border-gray-300 text-left">Donor</th>
-                <th className="p-3 border border-gray-300 text-left">Cause</th>
-                <th className="p-3 border border-gray-300 text-left">Amount</th>
-                <th className="p-3 border border-gray-300 text-left">Timestamp</th>
-                <th className="p-3 border border-gray-300 text-left">Transaction</th>
+              <tr className="bg-gray-700/50">
+                <th className="p-3 border border-gray-600 text-left text-gray-300">Donor</th>
+                <th className="p-3 border border-gray-600 text-left text-gray-300">Cause</th>
+                <th className="p-3 border border-gray-600 text-left text-gray-300">Amount</th>
+                <th className="p-3 border border-gray-600 text-left text-gray-300">Timestamp</th>
+                <th className="p-3 border border-gray-600 text-left text-gray-300">Transaction</th>
               </tr>
             </thead>
             <tbody>
               {[...filteredDonations].reverse().map((d, idx) => (
-                <tr key={idx} className="hover:bg-gray-50">
-                  <td className="p-3 border border-gray-300">
-                    <span className="font-mono text-sm">
+                <tr key={idx} className="hover:bg-gray-700/30">
+                  <td className="p-3 border border-gray-600">
+                    <span className="font-mono text-sm text-gray-300">
                       {d.donor.slice(0, 6)}...{d.donor.slice(-4)}
                     </span>
                     {d.donor === walletAddress && (
-                      <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">You</span>
+                      <span className="ml-2 text-xs bg-blue-900/50 text-blue-300 px-2 py-1 rounded border border-blue-500">You</span>
                     )}
                   </td>
-                  <td className="p-3 border border-gray-300">
-                    <span className="px-2 py-1 bg-gray-100 rounded text-sm">{d.cause}</span>
+                  <td className="p-3 border border-gray-600">
+                    <span className="px-2 py-1 bg-gray-600/50 rounded text-sm text-gray-300 border border-gray-500">{d.cause}</span>
                   </td>
-                  <td className="p-3 border border-gray-300 font-semibold text-green-600">
+                  <td className="p-3 border border-gray-600 font-semibold text-green-400">
                     {parseFloat(d.amount).toFixed(3)} MATIC
                   </td>
-                  <td className="p-3 border border-gray-300 text-sm text-gray-600">
+                  <td className="p-3 border border-gray-600 text-sm text-gray-400">
                     {new Date(d.timestamp).toLocaleString()}
                   </td>
-                  <td className="p-3 border border-gray-300">
+                  <td className="p-3 border border-gray-600">
                     {d.tx_hash ? (
                       <a
                         href={`https://amoy.polygonscan.com/tx/${d.tx_hash}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline text-sm font-mono"
+                        className="text-blue-400 hover:underline text-sm font-mono"
                       >
                         {d.tx_hash.slice(0, 6)}...{d.tx_hash.slice(-4)}
                       </a>
                     ) : (
-                      <span className="text-gray-400 text-sm">N/A</span>
+                      <span className="text-gray-500 text-sm">N/A</span>
                     )}
                   </td>
                 </tr>

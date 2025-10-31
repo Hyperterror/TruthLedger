@@ -83,40 +83,40 @@ export default function Dashboard() {
   }
 
   return (
-    <section>
-      <h2 className="text-3xl font-semibold mb-4 text-blue-700">Dashboard</h2>
+    <section className="max-w-7xl mx-auto p-6">
+      <h2 className="text-3xl font-semibold mb-4 text-blue-400">Dashboard</h2>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white p-6 rounded shadow text-center">
-          <p className="text-gray-600">Total Donations</p>
-          <p className="text-4xl font-bold text-blue-600">{stats.totalDonations}</p>
+        <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-700 text-center">
+          <p className="text-gray-300">Total Donations</p>
+          <p className="text-4xl font-bold text-blue-400">{stats.totalDonations}</p>
         </div>
-        <div className="bg-white p-6 rounded shadow text-center">
-          <p className="text-gray-600">Total Amount (MATIC)</p>
-          <p className="text-4xl font-bold text-green-600">{stats.totalAmount.toFixed(2)}</p>
+        <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-700 text-center">
+          <p className="text-gray-300">Total Amount (MATIC)</p>
+          <p className="text-4xl font-bold text-green-400">{stats.totalAmount.toFixed(2)}</p>
         </div>
-        <div className="bg-white p-6 rounded shadow text-center">
-          <p className="text-gray-600">Your Donations</p>
-          <p className="text-4xl font-bold text-purple-600">{stats.userDonations}</p>
+        <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-700 text-center">
+          <p className="text-gray-300">Your Donations</p>
+          <p className="text-4xl font-bold text-purple-400">{stats.userDonations}</p>
         </div>
-        <div className="bg-white p-6 rounded shadow text-center">
-          <p className="text-gray-600">Your Total (MATIC)</p>
-          <p className="text-4xl font-bold text-orange-600">{stats.userAmount.toFixed(2)}</p>
+        <div className="bg-gray-800/50 backdrop-blur-sm p-6 rounded-2xl shadow-lg border border-gray-700 text-center">
+          <p className="text-gray-300">Your Total (MATIC)</p>
+          <p className="text-4xl font-bold text-orange-400">{stats.userAmount.toFixed(2)}</p>
         </div>
       </div>
 
       {/* Wallet Info */}
-      <div className="bg-white p-4 rounded shadow mb-6">
-        <h3 className="text-lg font-semibold mb-2">Wallet Information</h3>
-        <p className="text-sm text-gray-600">
+      <div className="bg-gray-800/50 backdrop-blur-sm p-4 rounded-2xl shadow-lg border border-gray-700 mb-6">
+        <h3 className="text-lg font-semibold mb-2 text-blue-400">Wallet Information</h3>
+        <p className="text-sm text-gray-300">
           Connected: {walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : "Not connected"}
         </p>
       </div>
 
       {/* Chart */}
-      <div className="bg-white rounded shadow p-6">
-        <h3 className="text-lg font-semibold mb-4">Donation Analytics</h3>
+      <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-700 p-6">
+        <h3 className="text-lg font-semibold mb-4 text-blue-400">Donation Analytics</h3>
         <DonationChart />
       </div>
     </section>

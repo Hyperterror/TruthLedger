@@ -59,7 +59,7 @@ export default function Donate() {
         // Optionally sync with backend (though event listener should handle this)
         try {
           await donationsAPI.getAll(); // This will refresh data from backend
-        } catch (error) {
+        } catch {
           console.log("Backend sync optional, event listener will handle");
         }
 
@@ -85,17 +85,17 @@ export default function Donate() {
   }
 
   return (
-    <section className="max-w-md mx-auto p-6 bg-white rounded shadow">
-      <h2 className="text-3xl font-semibold mb-6 text-center">Make a Donation</h2>
+    <section className="max-w-md mx-auto p-6 bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-700">
+      <h2 className="text-3xl font-semibold mb-6 text-center text-blue-400">Make a Donation</h2>
 
-      <div className="mb-4 p-3 bg-gray-50 rounded">
-        <p className="text-sm text-gray-600">
+      <div className="mb-4 p-3 bg-gray-700/50 rounded-lg border border-gray-600">
+        <p className="text-sm text-gray-300">
           Connected Wallet: {walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : "Not connected"}
         </p>
       </div>
 
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        <label className="block font-medium">
+        <label className="block font-medium text-gray-300">
           Amount (MATIC)
           <input
             type="number"
@@ -103,20 +103,20 @@ export default function Donate() {
             min="0.01"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
+            className="w-full border border-gray-600 rounded-lg px-3 py-2 mt-1 bg-gray-700/50 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
             placeholder="0.00"
             required
             disabled={loading}
           />
         </label>
 
-        <label className="block font-medium">
+        <label className="block font-medium text-gray-300">
           Cause
           <input
             type="text"
             value={cause}
             onChange={(e) => setCause(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
+            className="w-full border border-gray-600 rounded-lg px-3 py-2 mt-1 bg-gray-700/50 text-white placeholder-gray-400 focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
             placeholder="e.g., Education, Healthcare, Environment"
             required
             disabled={loading}
@@ -126,29 +126,29 @@ export default function Donate() {
         <button
           type="submit"
           disabled={loading || !amount || !cause.trim()}
-          className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded py-2 font-semibold transition duration-200"
+          className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-500 disabled:cursor-not-allowed text-white rounded-lg py-2 font-semibold transition duration-200"
         >
           {loading ? "Processing Donation..." : "Donate"}
         </button>
       </form>
 
       {txHash && (
-        <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded">
-          <p className="text-sm text-green-800">
+        <div className="mt-4 p-3 bg-green-900/50 border border-green-500 rounded-lg">
+          <p className="text-sm text-green-400">
             Transaction successful! Hash: {txHash.slice(0, 10)}...{txHash.slice(-8)}
           </p>
           <a
             href={`https://amoy.polygonscan.com/tx/${txHash}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 hover:underline text-sm"
+            className="text-blue-400 hover:underline text-sm"
           >
             View on PolygonScan
           </a>
         </div>
       )}
 
-      <div className="mt-4 text-xs text-gray-500">
+      <div className="mt-4 text-xs text-gray-400">
         <p>⚠️ This will initiate a blockchain transaction requiring MATIC and gas fees.</p>
       </div>
     </section>
