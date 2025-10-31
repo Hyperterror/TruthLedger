@@ -15,12 +15,13 @@
 ## 4. Update Authentication State Management
 - [x] Create src/store/authSlice.js for wallet authentication state
 - [x] Update src/store/index.js to include auth reducer
-- [ ] Add auth context or hooks for wallet state
+- [x] Add Redux Provider to main.jsx for state management
 
 ## 5. Update Login/Signup Pages
 - [x] Update src/pages/Login.jsx for MetaMask wallet connection
 - [x] Update src/pages/Signup.jsx for wallet registration
 - [x] Integrate with backend auth API
+- [x] Update Navbar to show wallet address when authenticated
 
 ## 6. Update Donate Page
 - [x] Update src/pages/Donate.jsx for blockchain donation transactions
@@ -30,7 +31,7 @@
 ## 7. Update Dashboard/Donations Pages
 - [x] Update src/pages/Dashboard.jsx to fetch data from API
 - [x] Update src/pages/Donations.jsx to fetch donations from API
-- [x] Replace Redux mock data with API calls
+- [x] Apply dark theme styling to all pages
 
 ## 8. Integrate WebSocket for Real-time Updates
 - [ ] Add WebSocket connection in frontend
